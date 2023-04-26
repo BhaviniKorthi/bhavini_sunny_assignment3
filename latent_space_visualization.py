@@ -160,3 +160,73 @@ if __name__ == '__main__':
 # if __name__ == '__main__':
 #     run_training()
 #     print("END")
+
+
+
+# import torch.nn as nn
+
+# class MLP(nn.Module):
+#     def __init__(self, input_size, output_size):
+#         super(MLP, self).__init__()
+#         self.fc1 = nn.Linear(input_size, output_size)
+        
+#     def forward(self, x):
+#         x = x.view(x.size(0), -1)  
+#         x = self.fc1(x)
+#         return x
+# dataiter = iter(trainloader)
+# images, labels= dataiter.__next__()
+# encoded = autoencoder.encoder(images)
+# print(encoded.shape)
+# print(labels.shape)
+
+# import torch.optim as optim
+# import torch.nn.functional as F
+# import torch
+# from torch.utils.data import TensorDataset, DataLoader
+
+
+# mlp = MLP(input_size=64*4*4, output_size=10)
+# criterion = F.cross_entropy
+# optimizer = optim.Adam(mlp.parameters(), lr=0.001)
+
+
+# dataiter = iter(trainloader)
+# images, labels= dataiter.__next__()
+# encoded = autoencoder.encoder(images)
+# dataset = TensorDataset(encoded, labels)
+
+
+# batch_size = 32
+# trian_loader_encoded = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+# num_epochs = 20
+# for epoch in range(num_epochs):
+#     running_loss = 0.0
+#     for i, data in enumerate(trian_loader_encoded, 0):
+#         inputs, labels = data
+#         optimizer.zero_grad()
+#         outputs = mlp(inputs)
+#         loss = criterion(outputs, labels)
+#         loss.backward(retain_graph=True)
+#         optimizer.step()
+#         running_loss += loss.item()
+#         if i  == len(trian_loader_encoded)-1:    # print for every 100 mini-batches
+#             print('[Epoch %d] loss: %.3f' %
+#                   (epoch + 1,  running_loss / 100))
+#             running_loss = 0.0
+
+# dataiter = iter(trainloader)
+# images, labels= dataiter.__next__()
+# encoded = autoencoder.encoder(images)
+# encoder_test = TensorDataset(encoded, labels)
+
+# mlp.eval()
+
+# outputs = mlp(encoded)
+# _, predicted = torch.max(outputs.data, 1)
+# print("Predicted: ", predicted)
+# print("Actual: ", labels)
+# total = labels.size(0)
+# correct = (predicted == labels).sum().item()
+# accuracy = correct / total
+# print("Accuracy: {:.2f}%\n".format(accuracy * 100))
