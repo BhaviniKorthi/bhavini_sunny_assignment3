@@ -42,13 +42,13 @@ transform = transforms.Compose([
     transforms.ToTensor(), 
     transforms.Normalize((0.49139968, 0.48215841, 0.44653091), (0.24703223, 0.24348513, 0.26158784))]
 )
-trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=False, transform=transform)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
-testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=False, transform=transform)
 testloader = torch.utils.data.DataLoader(testset, batch_size=128, shuffle=False, num_workers=2)
 classes = testset.classes
 
-# st.write("latent space visualisation")
+st.write("latent space visualisation")
 
 
 autoencoder = Autoencoder()
@@ -75,7 +75,7 @@ def run_training():
                 print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss/len(trainloader)))
                 running_loss = 0.0
 
-        if (epoch+1)%5==0:
+        if (epoch+1)%1==0:
             dataiter = iter(testloader)
             images, labels= dataiter.__next__()
 
@@ -92,7 +92,7 @@ def run_training():
             ax.set_title(f"t-SNE visualization after epoch {epoch+1}")
             ax.set_xlabel("Dimension 1")
             ax.set_ylabel("Dimension 2")
-            plt.savefig(f"plots/plot{(epoch)//5+1}.png")
+            plt.savefig(f"All_plots/plot{epoch+1}.png")
     
 
 if __name__ == '__main__':
@@ -100,3 +100,63 @@ if __name__ == '__main__':
     print("END")
 
 
+# import streamlit as st
+# import torch
+# import torchvision
+# import matplotlib.pyplot as plt
+
+# # Create the autoencoder model, loss function, and optimizer
+# autoencoder = Autoencoder()
+# criterion = nn.MSELoss()
+# optimizer = optim.Adam(autoencoder.parameters(), lr=0.01)
+
+# # Set the number of epochs and run the training loop
+# num_epochs = 1
+# def run_training():
+#     for epoch in range(num_epochs):
+#         running_loss = 0.0
+#         for i, data in enumerate(trainloader, 0):
+#             # Get the input data
+#             inputs, _ = data
+#             optimizer.zero_grad()
+
+#             # Forward pass through the autoencoder
+#             outputs = autoencoder(inputs)
+
+#             # Calculate the loss and backpropagate
+#             loss = criterion(outputs, inputs)
+#             loss.backward()
+#             optimizer.step()
+
+#             # Print statistics
+#             running_loss += loss.item()
+#             if i % 100 == 99:    # print every 100 mini-batches
+#                 print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / 100))
+#                 running_loss = 0.0
+
+#         # Display the original and reconstructed images
+#         dataiter = iter(testloader)
+#         images, labels = dataiter.__next__()
+#         output_imgs = autoencoder(images)
+
+#         plt.figure(figsize=(2, 2))
+
+#         # Display the original images
+#         plt.subplot
+#         plt.title('Original Images')
+#         plt.axis('off')
+#         plt.imshow(torchvision.utils.make_grid(images[:4]).numpy().transpose((1, 2, 0)), plt.savefig("Reconstructed/image1.png"))
+#         plt.savefig("Reconstructed/image1.png")
+
+#         # Display the reconstructed images
+#         plt.subplot
+#         plt.title('Reconstructed Images')
+#         plt.axis('off')
+#         plt.imshow(torchvision.utils.make_grid(output_imgs[:4]).detach().numpy().transpose((1, 2, 0)), plt.savefig("Reconstructed/image1.png"))
+#         plt.savefig("Reconstructed/image2.png")
+#         # plt.show()
+
+
+# if __name__ == '__main__':
+#     run_training()
+#     print("END")
